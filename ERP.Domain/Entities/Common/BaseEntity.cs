@@ -1,17 +1,18 @@
 ﻿
 
 using ERP.Domain.Entities.Common;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
-using System.Security.Principal;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Identity;
 using ERP.Domain.Enums;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics.Metrics;
+using System.Security.Principal;
 
 namespace ERP.Domain.Entities.Common;
 
 
-public class BaseEntity
+public class BaseModel
 {
     public int Id { get; set; }
 
@@ -26,12 +27,16 @@ public class BaseEntity
     public string? UpdatedByUserId { get; set; }
     [ForeignKey(nameof(UpdatedByUserId))]
     public virtual Employee? UpdatedUser { get; set; }
+
+    public bool IsActive { get; set; }
 }
-[Index(nameof(CompanyName), IsUnique = true)]
-public class Company : BaseEntity
+
+
+[Index(nameof(Name), IsUnique = true)]
+public class Company : BaseModel
 {
     [StringLength(250)]
-    public string CompanyName { get; set; } = null!;
+    public string Name { get; set; } = null!;
 
     [StringLength(250)]
     public string CompanyActivity { get; set; } = null!;
@@ -39,7 +44,11 @@ public class Company : BaseEntity
     [StringLength(100)]
     public string TaxNumber { get; set; } = null!;
 
+    [StringLength(100)]
     public string RecordNumber { get; set; } = null!;
+
+    [StringLength(100)]
+    public string Code { get; set; } = null!;
 
     [StringLength(100)]
     public string PhoneNumber { get; set; } = null!;
@@ -51,12 +60,15 @@ public class Company : BaseEntity
     [StringLength(250)]
     public string Address { get; set; } = null!;
 
-    [StringLength(100)]
+    [StringLength(500)]
     public string Logo { get; set; } = null!;
+
+    [StringLength(500)]
+    public string Signature { get; set; } = null!;
 }
 
 [Index(nameof(Name), IsUnique = true)]
-public class Branch : BaseEntity
+public class Branch : BaseModel
 {
     [StringLength(150)]
     public string Name { get; set; } = null!;
@@ -64,10 +76,16 @@ public class Branch : BaseEntity
     [StringLength(250)]
     public string Address { get; set; } = null!;
 
+    public string PhoneNumber { get; set; } = null!;
+
+    [EmailAddress]
+    [RegularExpression(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$")]
+    public string Email { get; set; } = null!;
+
     public bool IsMainBranch { get; set; }
 }
 
-public class Department : BaseEntity
+public class Department : BaseModel
 {
     public string Name { get; set; } = null!;
 
@@ -93,7 +111,7 @@ public class Employee : IdentityUser
     public virtual Department? Department { get; set; }
 }
 
-public class Brand : BaseEntity
+public class Brand : BaseModel
 {
     [StringLength(150)]
     public string Name { get; set; } = string.Empty;
@@ -106,7 +124,7 @@ public class Brand : BaseEntity
     public virtual Branch? Branch { get; set; }
 }
 
-public class Category : BaseEntity
+public class Category : BaseModel
 {
     [StringLength(150)]
     public string Name { get; set; } = string.Empty;
@@ -120,7 +138,7 @@ public class Category : BaseEntity
 
 }
 
-public class Product : BaseEntity
+public class Product : BaseModel
 {
     public string Name { get; set; } = string.Empty;
 
@@ -138,10 +156,13 @@ public class Product : BaseEntity
     public int UnitId { get; set; }
     [ForeignKey(nameof(UnitId))]
     public virtual Unit Unit { get; set; } = null!;
+    public int BranchId { get; set; }
+    [ForeignKey(nameof(BranchId))]
+    public virtual Branch? Branch { get; set; }
 
 }
 
-public class Stock : BaseEntity
+public class Stock : BaseModel
 {
     public int StoreId { get; set; }
     [ForeignKey(nameof(StoreId))]
@@ -153,21 +174,23 @@ public class Stock : BaseEntity
 
     public int Quantity { get; set; }
 }
-public class StockHistory : BaseEntity
+public class StockHistory 
 {
+    public int Id { get; set; }
+
     public int StockId { get; set; }
     [ForeignKey(nameof(StockId))]
     public virtual Stock? Stock { get; set; }
 
-    public DateTime Date { get; set; }
+    public DateTime Date { get; set; } = DateTime.UtcNow;
 
-    public string Event { get; set; }
+    public string Event { get; set; } = null!;
 
     public string CreatedByUserId { get; set; } = null!;
     [ForeignKey(nameof(CreatedByUserId))]
     public virtual Employee? CreatedUser { get; set; }
 }
-public class Store : BaseEntity
+public class Store : BaseModel
 {
     [StringLength(150)]
     public string Name { get; set; } = string.Empty;
@@ -182,7 +205,6 @@ public class Store : BaseEntity
     [EmailAddress]
     public string? Email { get; set; }
 
-    public string City { get; set; } = string.Empty;
 
     [StringLength(150)]
     public string Address { get; set; } = string.Empty;
@@ -193,21 +215,22 @@ public class Store : BaseEntity
     public virtual Branch Branch { get; set; } = null!;
 
 }
-public class StoreHistory : BaseEntity
+public class StoreHistory 
 {
+    public int Id { get; set; }
     public int StoreId { get; set; }
     [ForeignKey(nameof(StoreId))]
     public virtual Store? Store { get; set; }
 
-    public DateTime Date { get; set; }
+    public DateTime Date { get; set; } = DateTime.UtcNow;
 
-    public string Event { get; set; }
+    public string Event { get; set; } = null!;
 
     public string CreatedByUserId { get; set; } = null!;
     [ForeignKey(nameof(CreatedByUserId))]
 public virtual Employee? CreatedUser { get; set; }
 }
-public class Currency : BaseEntity
+public class Currency : BaseModel
 {
     public string CurrencyName { get; set; } = null!;
 
@@ -220,13 +243,13 @@ public class Currency : BaseEntity
     public virtual Branch? Branch { get; set; }
 }
 
-public class Unit : BaseEntity
+public class Unit : BaseModel
 {
     [StringLength(100)]
     public string Name { get; set; } = string.Empty;
 
     [MaxLength(20), MinLength(1)]
-    public decimal Quntity { get; set; }
+    public decimal Quantity { get; set; } = 0;
 
     public int BranchId { get; set; }
     [ForeignKey(nameof(BranchId))]

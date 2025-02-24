@@ -13,5 +13,6 @@ public static class Helper
     public enum eCurrency
     {
         EG,
+        Kw,
     }
 }
