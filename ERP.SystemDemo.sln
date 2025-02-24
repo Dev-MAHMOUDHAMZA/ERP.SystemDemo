@@ -13,7 +13,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentation", "Presentatio
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ERP.Domain", "ERP.Domain\ERP.Domain.csproj", "{DEDAC4F3-C703-47D7-80F1-05A2BE667F9B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Erp.Appliction", "Erp.Appliction\Erp.Appliction.csproj", "{31C76DE0-9921-4216-B8BA-75BA3E834C3C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application", "Erp.Appliction\Application.csproj", "{31C76DE0-9921-4216-B8BA-75BA3E834C3C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ERP.Infrastructure", "ERP.Infrastructure\ERP.Infrastructure.csproj", "{DED908C5-4EBF-42D9-8A71-774E321FCAE9}"
 EndProject

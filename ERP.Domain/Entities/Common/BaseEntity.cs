@@ -234,7 +234,7 @@ public class Currency : BaseModel
 {
     public string CurrencyName { get; set; } = null!;
 
-    public string CurrencyCode { get; set; } = Helper.eCurrency.EG.ToString();
+    public string CurrencyCode { get; set; } = EnumHelper.eCurrency.EG.ToString();
 
     public decimal ConvertCurrency { get; set; }
 
