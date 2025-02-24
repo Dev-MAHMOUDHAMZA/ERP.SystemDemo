@@ -16,13 +16,13 @@ public class AccountsServicesBL (UserManager<Employee> _userManager, IUnitOfWork
     {
         try
         {
-            var user = _unitOfWork.Employees.GetItem(u => u.Email.Equals(model.Email));
+            var user = _unitOfWork.Employees.GetItem(u => u.Email == model.Email);
 
             if (user is null)
                 return ((int)eLoginResult.UserNotFound, null);
 
-            if(user.ISActive is false)
-                return ((int)eLoginResult.UserInactive!, null!);
+            if (!user.ISActive)
+                return ((int)eLoginResult.UserInactive!, null);
 
             bool isPasswordCorrect = await _userManager.CheckPasswordAsync(user, model.Password);
 
