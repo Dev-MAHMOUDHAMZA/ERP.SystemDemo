@@ -1,6 +1,6 @@
 ﻿
 using Application.IServices;
-using Erp.Appliction.IUnitOfWork;
+using Application.IUnitOfWork;
 using ERP.Domain.Entities.Common;
 using ERP.Infrastructure.Data;
 using ERP.Infrastructure.Services;

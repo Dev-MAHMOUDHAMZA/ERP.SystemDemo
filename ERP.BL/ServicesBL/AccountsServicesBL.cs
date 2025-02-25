@@ -16,7 +16,7 @@ public class AccountsServicesBL (UserManager<Employee> _userManager, IUnitOfWork
     {
         try
         {
-            var user = _unitOfWork.Employees.GetItem(u => u.Email == model.Email);
+            var user = await _unitOfWork.Employees.GetItemAsync(u => u.Email == model.Email);
 
             if (user is null)
                 return ((int)eLoginResult.UserNotFound, null);
