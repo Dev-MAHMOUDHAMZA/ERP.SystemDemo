@@ -24,4 +24,11 @@ public static class EnumHelper
         UserNotFound =5,
         Error
     }
+    public enum eMsgResult
+    {
+
+        Successful = 1,
+        UserNotFound,
+        Error
+    }
 }
