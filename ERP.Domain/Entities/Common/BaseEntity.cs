@@ -6,8 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Diagnostics.Metrics;
-using System.Security.Principal;
+
 
 namespace ERP.Domain.Entities.Common;
 
@@ -256,7 +255,37 @@ public class Unit : BaseModel
     public virtual Branch? Branch { get; set; }
 }
 
+public class Supplier : BaseModel
+{
+    public string Name { get; set; } = null!;
 
+    public string? PhoneNumber { get; set; }
+
+    public string? Email { get; set; }
+
+    public decimal? FirstBalance { get; set; } = 0;
+
+
+}
+public class Customer : BaseModel
+{
+    public string Name { get; set; } = null!;
+
+    public string? PhoneNumber { get; set; }
+
+    public string? Email { get; set; }
+
+    public decimal? FirstBalance { get; set; } = 0;
+}
+public class Client : BaseModel
+{
+    public string Name { get; set; } = null!;
+
+    public string? PhoneNumber { get; set; }
+
+    public string? Address { get; set; }
+
+}
 
 
 
