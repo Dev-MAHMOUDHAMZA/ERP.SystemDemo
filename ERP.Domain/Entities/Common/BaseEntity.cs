@@ -11,7 +11,7 @@ using static ERP.Domain.Enums.EnumHelper;
 
 namespace ERP.Domain.Entities.Common;
 
-
+//Common
 public class BaseModel
 {
     public int Id { get; set; }
@@ -30,8 +30,33 @@ public class BaseModel
 
     public bool IsActive { get; set; } = true;
 }
+public class FollowUp
+{
+    public int Id { get; set; }
+    public string? IpAddress { get; set; }
 
+    public DateTime CreatedOn { get; set; } = DateTime.Now;
 
+    public string? Event { get; set; }
+    /// <summary>
+    /// Navigation Property
+    /// </summary>
+    public required string EmployeeId { get; set; }
+    [ForeignKey(nameof(EmployeeId))]
+    public virtual Employee? Employee { get; set; }
+}
+public class LoginUser
+{
+    public int Id { get; set; }
+    public DateTime Login { get; set; }
+    public DateTime? LogOut { get; set; }
+
+    public string EmployeeId { get; set; } = null!;
+    public Employee? Employee { get; set; }
+}
+//End Common
+
+//Hierarchy
 [Index(nameof(Name), IsUnique = true)]
 public class Company : BaseModel
 {
@@ -94,7 +119,6 @@ public class Department : BaseModel
     public virtual Branch? Branch { get; set; }
 }
 
-
 [Index(nameof(FullName), IsUnique = true)]
 public class Employee : IdentityUser
 {
@@ -124,6 +148,35 @@ public class Salary
     public decimal Deductions { get; set; }
     public DateTime SalaryDate { get; set; }
 }
+//End Hierarchy
+
+//System Setting
+public class Currency : BaseModel
+{
+    public string CurrencyName { get; set; } = null!;
+
+    public string CurrencyCode { get; set; } = EnumHelper.eCurrency.EG.ToString();
+
+    public decimal ConvertCurrency { get; set; }
+
+    public int BranchId { get; set; }
+    [ForeignKey(nameof(BranchId))]
+    public virtual Branch? Branch { get; set; }
+}
+public class Unit : BaseModel
+{
+    [StringLength(100)]
+    public string Name { get; set; } = string.Empty;
+
+    [MaxLength(20), MinLength(1)]
+    public decimal Quantity { get; set; } = 0;
+
+    public int BranchId { get; set; }
+    [ForeignKey(nameof(BranchId))]
+    public virtual Branch? Branch { get; set; }
+}
+//End System Setting
+
 public class Brand : BaseModel
 {
     [StringLength(150)]
@@ -240,30 +293,8 @@ public class StoreHistory
     [ForeignKey(nameof(CreatedByUserId))]
 public virtual Employee? CreatedUser { get; set; }
 }
-public class Currency : BaseModel
-{
-    public string CurrencyName { get; set; } = null!;
 
-    public string CurrencyCode { get; set; } = EnumHelper.eCurrency.EG.ToString();
 
-    public decimal ConvertCurrency { get; set; }
-
-    public int BranchId { get; set; }
-    [ForeignKey(nameof(BranchId))]
-    public virtual Branch? Branch { get; set; }
-}
-public class Unit : BaseModel
-{
-    [StringLength(100)]
-    public string Name { get; set; } = string.Empty;
-
-    [MaxLength(20), MinLength(1)]
-    public decimal Quantity { get; set; } = 0;
-
-    public int BranchId { get; set; }
-    [ForeignKey(nameof(BranchId))]
-    public virtual Branch? Branch { get; set; }
-}
 public class Supplier : BaseModel
 {
     public string Name { get; set; } = null!;
@@ -368,6 +399,7 @@ public class Payment
     public DateTime PaymentDate { get; set; }
 }
 
+
 //public class UserModel
 //{
 //    public string Id { get; set; } = null!;
@@ -394,7 +426,8 @@ public class Payment
 //}
 
 //Return Invoice  فاتورة مرتجعات
-
+//CustomerAccount
+//SupplierAccount
 
 
 

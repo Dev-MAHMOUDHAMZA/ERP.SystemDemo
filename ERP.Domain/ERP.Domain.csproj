@@ -14,4 +14,8 @@
     <ProjectReference Include="..\ERP.Dtos\ERP.Dtos.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Entities\Hierarchy\" />
+  </ItemGroup>
+
 </Project>
