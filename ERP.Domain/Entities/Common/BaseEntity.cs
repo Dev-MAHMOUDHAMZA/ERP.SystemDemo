@@ -166,7 +166,7 @@ public class Currency : BaseModel
 public class Unit : BaseModel
 {
     [StringLength(100)]
-    public string Name { get; set; } = string.Empty;
+    public string Name { get; set; } = string.Empty; // Pc , Mater , 
 
     [MaxLength(20), MinLength(1)]
     public decimal Quantity { get; set; } = 0;
@@ -347,6 +347,8 @@ public class SaleInvoice
 
     public int PaymentMethodId { get; set; }
     public PaymentMethod? PaymentMethod { get; set; }
+
+    public DateTime SystemDate { get; set; } = DateTime.Now;
 }
 public class InvoiceItem
 {
@@ -371,6 +373,7 @@ public class PurchaseInvoice
     public DateTime InvoiceDate { get; set; }
     public int PaymentMethodId { get; set; }
     public PaymentMethod? PaymentMethod { get; set; }
+    public DateTime SystemDate { get; set; } = DateTime.Now;
 }
 public class PurchaseInvoiceItem
 {
@@ -387,19 +390,75 @@ public class PurchaseInvoiceItem
 public class Payment
 {
     public int Id { get; set; }
-    public int CustomerId { get; set; }
-    public Customer? Customer { get; set; }
+    public int SupplierId { get; set; }
+    public Supplier? Supplier { get; set; }
+    public decimal AmountPaid { get; set; }
+    public int PaymentMethodId { get; set; }  // "Credit Card", "Cash", "Bank Transfer"
+    public PaymentMethod? PaymentMethod { get; set; }
+    public DateTime PaymentDate { get; set; }
+    public DateTime SystemDate { get; set; } = DateTime.Now;
+}
 
-    public int PurchaseInvoiceId { get; set; }
-    public PurchaseInvoice? PurchaseInvoice { get; set; }
+public class Receipt
+{
+    public int Id { get; set; }
+    public int SaleInvoiceId { get; set; }
+    public SaleInvoice? SaleInvoice { get; set; }
 
     public decimal AmountPaid { get; set; }
     public int PaymentMethodId { get; set; }  // "Credit Card", "Cash", "Bank Transfer"
     public PaymentMethod? PaymentMethod { get; set; }
     public DateTime PaymentDate { get; set; }
+    public DateTime SystemDate { get; set; } = DateTime.Now;
 }
 
 
+public class CustomerAccount
+{
+    public int Id { get; set; }
+    public int ItemId { get; set; }
+    public string Item { get; set; } = null!;
+
+    public decimal? Creditor { get; set; }
+    public decimal? Debtor { get; set; }
+
+    public DateTime Date { get; set; }
+
+    public decimal Total { get; set; }
+}
+public class SupplierAccount
+{
+    public int Id { get; set; }
+
+    public int ItemId { get; set; }
+
+    public string Item { get; set; } = null!;
+
+    public decimal? Creditor { get; set; }
+    public decimal? Debtor { get; set; }
+
+    public DateTime Date { get; set; }
+
+    public decimal Total { get; set; }
+}
+
+
+
+
+
+//public class Currency
+//{
+//    public int CurrencyID { get; set; }
+//    [MaxLength(100)]
+//    public string CurrencyName { get; set; } = string.Empty;
+//    public int Rate { get; set; }
+//    public int DefaultCurrency { get; set; }
+
+//    public virtual ICollection<Invoice>? Payments { get; set; } = new List<Invoice>();
+//    public virtual ICollection<Expense>? Expenses { get; set; } = new List<Expense>();
+//    public virtual ICollection<ERPTransiation>? ERPTransiations { get; set; } = new List<ERPTransiation>();
+
+//}
 //public class UserModel
 //{
 //    public string Id { get; set; } = null!;
@@ -425,7 +484,8 @@ public class Payment
 //    public bool EmailConfirmed { get; set; }
 //}
 
-//Return Invoice  فاتورة مرتجعات
+//ReturnSaleInvoice  فاتورة مرتجعات
+//PurchaseInvoice  فاتورة مرتجعات
 //CustomerAccount
 //SupplierAccount
 
