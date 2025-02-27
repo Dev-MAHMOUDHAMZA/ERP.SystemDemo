@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using static ERP.Domain.Enums.EnumHelper;
 
 
 namespace ERP.Domain.Entities.Common;
@@ -27,7 +28,7 @@ public class BaseModel
     [ForeignKey(nameof(UpdatedByUserId))]
     public virtual Employee? UpdatedUser { get; set; }
 
-    public bool IsActive { get; set; }
+    public bool IsActive { get; set; } = true;
 }
 
 
@@ -93,23 +94,36 @@ public class Department : BaseModel
     public virtual Branch? Branch { get; set; }
 }
 
+
 [Index(nameof(FullName), IsUnique = true)]
 public class Employee : IdentityUser
 {
     [StringLength(250)]
     public string FullName { get; set; } = null!;
-
     public bool ISActive { get; set; }
 
     public bool IsUser { get; set; }
 
     public string? ImagePath { get; set; }
 
+    public DateTime HireDate { get; set; }
+
     public int DepartmentId { get; set; }
     [ForeignKey(nameof(DepartmentId))]
     public virtual Department? Department { get; set; }
 }
+public class Salary
+{
+    public int Id { get; set; }
+    public int EmployeeId { get; set; }
+    [ForeignKey(nameof(EmployeeId))]
+    public Employee? Employee { get; set; }
 
+    public decimal BasicSalary { get; set; }
+    public decimal Bonus { get; set; }
+    public decimal Deductions { get; set; }
+    public DateTime SalaryDate { get; set; }
+}
 public class Brand : BaseModel
 {
     [StringLength(150)]
@@ -122,7 +136,6 @@ public class Brand : BaseModel
     [ForeignKey(nameof(BranchId))]
     public virtual Branch? Branch { get; set; }
 }
-
 public class Category : BaseModel
 {
     [StringLength(150)]
@@ -136,7 +149,6 @@ public class Category : BaseModel
     public virtual Branch? Branch { get; set; }
 
 }
-
 public class Product : BaseModel
 {
     public string Name { get; set; } = string.Empty;
@@ -160,7 +172,6 @@ public class Product : BaseModel
     public virtual Branch? Branch { get; set; }
 
 }
-
 public class Stock : BaseModel
 {
     public int StoreId { get; set; }
@@ -241,7 +252,6 @@ public class Currency : BaseModel
     [ForeignKey(nameof(BranchId))]
     public virtual Branch? Branch { get; set; }
 }
-
 public class Unit : BaseModel
 {
     [StringLength(100)]
@@ -254,7 +264,6 @@ public class Unit : BaseModel
     [ForeignKey(nameof(BranchId))]
     public virtual Branch? Branch { get; set; }
 }
-
 public class Supplier : BaseModel
 {
     public string Name { get; set; } = null!;
@@ -264,6 +273,10 @@ public class Supplier : BaseModel
     public string? Email { get; set; }
 
     public decimal? FirstBalance { get; set; } = 0;
+
+    public int BranchId { get; set; }
+    [ForeignKey(nameof(BranchId))]
+    public virtual Branch? Branch { get; set; }
 
 
 }
@@ -276,19 +289,84 @@ public class Customer : BaseModel
     public string? Email { get; set; }
 
     public decimal? FirstBalance { get; set; } = 0;
+
+    public int BranchId { get; set; }
+    [ForeignKey(nameof(BranchId))]
+    public virtual Branch? Branch { get; set; }
 }
-public class Client : BaseModel
+/// <summary>
+/// ///////////////////////////////////////////////////////////
+/// </summary>
+//public class InvoiceType : BaseModel
+//{
+//    public string Name { get; set; } = null!; //
+//}
+public class PaymentMethod : BaseModel
 {
-    public string Name { get; set; } = null!;
+    public string Name { get; set; } = null!;// "Credit Card", "Cash", "Bank Transfer","Delayed"
+}
+public class SaleInvoice
+{
+    public int Id { get; set; }
+    public int CustomerId { get; set; }
+    public Customer? Customer { get; set; }
 
-    public string? PhoneNumber { get; set; }
+    public decimal TotalAmount { get; set; }
+    public DateTime InvoiceDate { get; set; }
 
-    public string? Address { get; set; }
+    public int PaymentMethodId { get; set; }
+    public PaymentMethod? PaymentMethod { get; set; }
+}
+public class InvoiceItem
+{
+    public int Id { get; set; }
+    public int SaleInvoiceId { get; set; }
+    public SaleInvoice SaleInvoice { get; set; } = null!;
 
+    public int ProductId { get; set; }
+    public Product Product { get; set; } = null!;
+
+    public int Quantity { get; set; }
+    public decimal UnitPrice { get; set; }
 }
 
+public class PurchaseInvoice
+{
+    public int Id { get; set; }
+    public int SupplierId { get; set; }
+    public Supplier? Supplier { get; set; }
 
+    public decimal TotalAmount { get; set; }
+    public DateTime InvoiceDate { get; set; }
+    public int PaymentMethodId { get; set; }
+    public PaymentMethod? PaymentMethod { get; set; }
+}
+public class PurchaseInvoiceItem
+{
+    public int Id { get; set; }
+    public int PurchaseInvoiceId { get; set; }
+    public PurchaseInvoice PurchaseInvoice { get; set; } = null!;
 
+    public int ProductId { get; set; }
+    public Product Product { get; set; } = null!;
+
+    public int Quantity { get; set; }
+    public decimal UnitPrice { get; set; }
+}
+public class Payment
+{
+    public int Id { get; set; }
+    public int CustomerId { get; set; }
+    public Customer? Customer { get; set; }
+
+    public int PurchaseInvoiceId { get; set; }
+    public PurchaseInvoice? PurchaseInvoice { get; set; }
+
+    public decimal AmountPaid { get; set; }
+    public int PaymentMethodId { get; set; }  // "Credit Card", "Cash", "Bank Transfer"
+    public PaymentMethod? PaymentMethod { get; set; }
+    public DateTime PaymentDate { get; set; }
+}
 
 //public class UserModel
 //{
@@ -315,7 +393,7 @@ public class Client : BaseModel
 //    public bool EmailConfirmed { get; set; }
 //}
 
-
+//Return Invoice  فاتورة مرتجعات
 
 
 
