@@ -1,14 +1,4 @@
 ﻿
-
-using ERP.Domain.Entities.Common;
-using ERP.Domain.Enums;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using static ERP.Domain.Enums.EnumHelper;
-
-
 namespace ERP.Domain.Entities.Common;
 
 //Common
@@ -334,12 +324,14 @@ public class Customer : BaseModel
 //}
 public class PaymentMethod : BaseModel
 {
-    public string Name { get; set; } = null!;// "Credit Card", "Cash", "Bank Transfer","Delayed"
+    public string Name { get; set; } = null!;// "Credit Card", "Cash", "Bank Transfer","Delayed"  (Seeding)
 }
+
 public class SaleInvoice
 {
     public int Id { get; set; }
     public int CustomerId { get; set; }
+    [ForeignKey(nameof(CustomerId))]
     public Customer? Customer { get; set; }
 
     public decimal TotalAmount { get; set; }
@@ -348,16 +340,22 @@ public class SaleInvoice
     public int PaymentMethodId { get; set; }
     public PaymentMethod? PaymentMethod { get; set; }
 
-    public DateTime SystemDate { get; set; } = DateTime.Now;
+    public DateTime SystemDate { get; set; } = DateTime.Now; //System Date
 }
 public class InvoiceItem
 {
     public int Id { get; set; }
     public int SaleInvoiceId { get; set; }
+    [ForeignKey(nameof(SaleInvoiceId))]
     public SaleInvoice SaleInvoice { get; set; } = null!;
 
     public int ProductId { get; set; }
+    [ForeignKey(nameof(ProductId))]
     public Product Product { get; set; } = null!;
+
+    public int StoreId { get; set; }
+    [ForeignKey(nameof(StoreId))]
+    public virtual Store? Store { get; set; }
 
     public int Quantity { get; set; }
     public decimal UnitPrice { get; set; }
@@ -384,6 +382,10 @@ public class PurchaseInvoiceItem
     public int ProductId { get; set; }
     public Product Product { get; set; } = null!;
 
+    public int StoreId { get; set; }
+    [ForeignKey(nameof(StoreId))]
+    public virtual Store? Store { get; set; }
+
     public int Quantity { get; set; }
     public decimal UnitPrice { get; set; }
 }
@@ -402,8 +404,8 @@ public class Payment
 public class Receipt
 {
     public int Id { get; set; }
-    public int SaleInvoiceId { get; set; }
-    public SaleInvoice? SaleInvoice { get; set; }
+    public int CustomerId { get; set; }
+    public Customer? Customer { get; set; }
 
     public decimal AmountPaid { get; set; }
     public int PaymentMethodId { get; set; }  // "Credit Card", "Cash", "Bank Transfer"
@@ -486,8 +488,7 @@ public class SupplierAccount
 
 //ReturnSaleInvoice  فاتورة مرتجعات
 //PurchaseInvoice  فاتورة مرتجعات
-//CustomerAccount
-//SupplierAccount
+
 
 
 
