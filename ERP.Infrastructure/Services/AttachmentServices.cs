@@ -1,43 +1,8 @@
 ﻿
-using Application.IServices;
-using Application.IUnitOfWork;
-using ERP.Domain.Constants.GlobalConst;
-using ERP.Infrastructure.Data;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Logging;
-using System.Drawing;
-
 namespace ERP.Infrastructure.Services;
 
-public class AttachmentServices(IUnitOfWork _unitOfWork, ApplicationDbContext _context,
-    ILogger<AttachmentServices> _logger) : IAttachmentServices
+public class AttachmentServices : IAttachmentServices
 {
-    //public void Delete(string filePath)
-    //{
-    //    var oldImagePath = $"{ConstPathRoot.PathWWWRoot}{filePath}";
-
-    //    if (File.Exists(oldImagePath))
-    //        File.Delete(oldImagePath);
-    //}
-    //public async Task<(bool isSaved, string fileName)> UploadFileAsync(IFormFile file, string folderName)
-    //{
-    //    try
-    //    {
-    //        var fileName = DateTime.Now.ToFileTime() + Path.GetExtension(file.FileName);
-    //        var pathFolder = Path.Combine(ConstPathRoot.PathWWWRoot, folderName);
-    //        if (!File.Exists(pathFolder))
-    //            File.Create(pathFolder);
-
-    //        var fileStream = new FileStream(Path.Combine(ConstPathRoot.PathWWWRoot, folderName, fileName), FileMode.Create);
-    //        await file.CopyToAsync(fileStream);
-
-    //        return (true, fileName);
-    //    }
-    //    catch
-    //    {
-    //        return (false, null!);
-    //    }
-    //}
     public void Delete(string filePath)
     {
         try
