@@ -418,9 +418,10 @@ public class Payment
     
     public int PaymentMethodId { get; set; }  // "Cash", "Bank Transfer"
     public PaymentMethod? PaymentMethod { get; set; }
+    
     public DateTime PaymentDate { get; set; }
     public DateTime SystemDate { get; set; } = DateTime.Now;
-    //Attachment
+    public string? Attachment { get; set; }
     public string CreatedByUserId { get; set; } = null!;
     [ForeignKey(nameof(CreatedByUserId))]
     public virtual Employee? CreatedUser { get; set; }
@@ -440,7 +441,7 @@ public class Receipt
     public PaymentMethod? PaymentMethod { get; set; }
     public DateTime PaymentDate { get; set; }
     public DateTime SystemDate { get; set; } = DateTime.Now;
-    
+    public string? Attachment { get; set; }
     public string CreatedByUserId { get; set; } = null!;
     [ForeignKey(nameof(CreatedByUserId))]
     public virtual Employee? CreatedUser { get; set; }
