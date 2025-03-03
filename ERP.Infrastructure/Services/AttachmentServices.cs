@@ -21,9 +21,7 @@ public class AttachmentServices : IAttachmentServices
                 Console.WriteLine($"File deleted: {oldImagePath}");
             }
             else
-            {
                 Console.WriteLine("File not found.");
-            }
         }
         catch (Exception ex)
         {

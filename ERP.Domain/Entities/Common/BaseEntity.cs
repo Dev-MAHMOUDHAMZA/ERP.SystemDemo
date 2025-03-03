@@ -79,7 +79,7 @@ public class Company : BaseModel
     public string Logo { get; set; } = null!;
 
     [StringLength(500)]
-    public string Signature { get; set; } = null!;
+    public string Seal { get; set; } = null!;
 }
 
 [Index(nameof(Name), IsUnique = true)]
@@ -114,11 +114,13 @@ public class Employee : IdentityUser
 {
     [StringLength(250)]
     public string FullName { get; set; } = null!;
-    public bool ISActive { get; set; }
+    public bool IsActive { get; set; }
 
     public bool IsUser { get; set; }
 
     public string? ImagePath { get; set; }
+    
+    public string? Signature { get; set; }
 
     public DateTime HireDate { get; set; }
 
@@ -126,18 +128,18 @@ public class Employee : IdentityUser
     [ForeignKey(nameof(DepartmentId))]
     public virtual Department? Department { get; set; }
 }
-public class Salary
-{
-    public int Id { get; set; }
-    public int EmployeeId { get; set; }
-    [ForeignKey(nameof(EmployeeId))]
-    public Employee? Employee { get; set; }
-
-    public decimal BasicSalary { get; set; }
-    public decimal Bonus { get; set; }
-    public decimal Deductions { get; set; }
-    public DateTime SalaryDate { get; set; }
-}
+// public class Salary
+// {
+//     public int Id { get; set; }
+//     public int EmployeeId { get; set; }
+//     [ForeignKey(nameof(EmployeeId))]
+//     public Employee? Employee { get; set; }
+//
+//     public decimal BasicSalary { get; set; }
+//     public decimal Bonus { get; set; }
+//     public decimal Deductions { get; set; }
+//     public DateTime SalaryDate { get; set; }
+// }
 //End Hierarchy
 
 //System Setting
@@ -159,7 +161,7 @@ public class Unit : BaseModel
     public string Name { get; set; } = string.Empty; // Pc , Mater , 
 
     [MaxLength(20), MinLength(1)]
-    public decimal Quantity { get; set; } = 0;
+    public decimal Quantity { get; set; } = 1;
 
     public int BranchId { get; set; }
     [ForeignKey(nameof(BranchId))]
@@ -196,7 +198,7 @@ public class Product : BaseModel
 {
     public string Name { get; set; } = string.Empty;
 
-    [Range(0, double.MaxValue)]
+    [Range(1, double.MaxValue)]
     public decimal Price { get; set; }
 
     public int BrandId { get; set; }
@@ -294,12 +296,9 @@ public class Supplier : BaseModel
     public string? Email { get; set; }
 
     public decimal? FirstBalance { get; set; } = 0;
-
     public int BranchId { get; set; }
     [ForeignKey(nameof(BranchId))]
     public virtual Branch? Branch { get; set; }
-
-
 }
 public class Customer : BaseModel
 {
@@ -324,12 +323,15 @@ public class Customer : BaseModel
 //}
 public class PaymentMethod : BaseModel
 {
-    public string Name { get; set; } = null!;// "Credit Card", "Cash", "Bank Transfer","Delayed"  (Seeding)
+    public string Name { get; set; } = null!;// "Cash", "Bank Transfer","Delayed"  (Seeding)
 }
 
 public class SaleInvoice
 {
     public int Id { get; set; }
+    
+    public int SaleInvoiceKey { get; set; } //Series
+    
     public int CustomerId { get; set; }
     [ForeignKey(nameof(CustomerId))]
     public Customer? Customer { get; set; }
@@ -341,6 +343,13 @@ public class SaleInvoice
     public PaymentMethod? PaymentMethod { get; set; }
 
     public DateTime SystemDate { get; set; } = DateTime.Now; //System Date
+    
+    public string CreatedByUserId { get; set; } = null!;
+    [ForeignKey(nameof(CreatedByUserId))]
+    public virtual Employee? CreatedUser { get; set; }
+    public int BranchId { get; set; }
+    [ForeignKey(nameof(BranchId))]
+    public virtual Branch? Branch { get; set; }
 }
 public class InvoiceItem
 {
@@ -359,11 +368,15 @@ public class InvoiceItem
 
     public int Quantity { get; set; }
     public decimal UnitPrice { get; set; }
+    public decimal Total { get; set; }
 }
 
 public class PurchaseInvoice
 {
     public int Id { get; set; }
+    
+    public int PurchaseInvoiceKey { get; set; } //Series
+    
     public int SupplierId { get; set; }
     public Supplier? Supplier { get; set; }
 
@@ -372,6 +385,12 @@ public class PurchaseInvoice
     public int PaymentMethodId { get; set; }
     public PaymentMethod? PaymentMethod { get; set; }
     public DateTime SystemDate { get; set; } = DateTime.Now;
+    public string CreatedByUserId { get; set; } = null!;
+    [ForeignKey(nameof(CreatedByUserId))]
+    public virtual Employee? CreatedUser { get; set; }
+    public int BranchId { get; set; }
+    [ForeignKey(nameof(BranchId))]
+    public virtual Branch? Branch { get; set; }
 }
 public class PurchaseInvoiceItem
 {
@@ -388,6 +407,7 @@ public class PurchaseInvoiceItem
 
     public int Quantity { get; set; }
     public decimal UnitPrice { get; set; }
+    public decimal Total { get; set; }
 }
 public class Payment
 {
@@ -395,10 +415,18 @@ public class Payment
     public int SupplierId { get; set; }
     public Supplier? Supplier { get; set; }
     public decimal AmountPaid { get; set; }
-    public int PaymentMethodId { get; set; }  // "Credit Card", "Cash", "Bank Transfer"
+    
+    public int PaymentMethodId { get; set; }  // "Cash", "Bank Transfer"
     public PaymentMethod? PaymentMethod { get; set; }
     public DateTime PaymentDate { get; set; }
     public DateTime SystemDate { get; set; } = DateTime.Now;
+    //Attachment
+    public string CreatedByUserId { get; set; } = null!;
+    [ForeignKey(nameof(CreatedByUserId))]
+    public virtual Employee? CreatedUser { get; set; }
+    public int BranchId { get; set; }
+    [ForeignKey(nameof(BranchId))]
+    public virtual Branch? Branch { get; set; }
 }
 
 public class Receipt
@@ -408,10 +436,17 @@ public class Receipt
     public Customer? Customer { get; set; }
 
     public decimal AmountPaid { get; set; }
-    public int PaymentMethodId { get; set; }  // "Credit Card", "Cash", "Bank Transfer"
+    public int PaymentMethodId { get; set; }  // "Cash", "Bank Transfer"
     public PaymentMethod? PaymentMethod { get; set; }
     public DateTime PaymentDate { get; set; }
     public DateTime SystemDate { get; set; } = DateTime.Now;
+    
+    public string CreatedByUserId { get; set; } = null!;
+    [ForeignKey(nameof(CreatedByUserId))]
+    public virtual Employee? CreatedUser { get; set; }
+    public int BranchId { get; set; }
+    [ForeignKey(nameof(BranchId))]
+    public virtual Branch? Branch { get; set; }
 }
 
 
@@ -427,6 +462,10 @@ public class CustomerAccount
     public DateTime Date { get; set; }
 
     public decimal Total { get; set; }
+    
+    public int CustomerId { get; set; }
+    [ForeignKey(nameof(CustomerId))]
+    public virtual Customer? Customer { get; set; }
 }
 public class SupplierAccount
 {
@@ -442,6 +481,10 @@ public class SupplierAccount
     public DateTime Date { get; set; }
 
     public decimal Total { get; set; }
+    
+    public int SupplierId { get; set; }
+    [ForeignKey(nameof(SupplierId))]
+    public virtual Supplier? Supplier { get; set; }
 }
 
 

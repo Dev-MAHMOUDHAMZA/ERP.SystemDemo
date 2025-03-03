@@ -8,7 +8,8 @@ using static ERP.Domain.Enums.EnumHelper;
 
 namespace ERP.BL.ServicesBL;
 
-public class AccountsServicesBL (UserManager<Employee> _userManager, IUnitOfWork _unitOfWork, ILogger<AccountsServicesBL> _logger)
+public class AccountsServicesBL (UserManager<Employee> _userManager, 
+    IUnitOfWork _unitOfWork, ILogger<AccountsServicesBL> _logger)
 {
     #region Methods
 
@@ -21,7 +22,7 @@ public class AccountsServicesBL (UserManager<Employee> _userManager, IUnitOfWork
             if (user is null)
                 return ((int)eLoginResult.UserNotFound, null);
 
-            if (!user.ISActive)
+            if (!user.IsActive)
                 return ((int)eLoginResult.UserInactive!, null);
 
             bool isPasswordCorrect = await _userManager.CheckPasswordAsync(user, model.Password);
