@@ -98,6 +98,20 @@ public class Branch : BaseModel
     public string Email { get; set; } = null!;
 
     public bool IsMainBranch { get; set; }
+
+    public virtual ICollection<Department>? Departments { get; set; } = new List<Department>();
+    public virtual ICollection<Currency>? Currencies { get; set; } = new List<Currency>();
+    public virtual ICollection<Unit>? Units { get; set; } = new List<Unit>();
+    public virtual ICollection<Brand>? Brands { get; set; } = new List<Brand>();
+    public virtual ICollection<Category>? Categories { get; set; } = new List<Category>();
+    public virtual ICollection<Product>? Products { get; set; } = new List<Product>();
+    public virtual ICollection<Store>? Stores { get; set; } = new List<Store>();
+    public virtual ICollection<Supplier>? Suppliers { get; set; } = new List<Supplier>();
+    public virtual ICollection<Customer>? Customers { get; set; } = new List<Customer>();
+    public virtual ICollection<SaleInvoice>? SaleInvoice { get; set; } = new List<SaleInvoice>();
+    public virtual ICollection<PurchaseInvoice>? PurchaseInvoices { get; set; } = new List<PurchaseInvoice>();
+    public virtual ICollection<Payment>? Payments { get; set; } = new List<Payment>();
+    public virtual ICollection<Receipt>? Receipts { get; set; } = new List<Receipt>();
 }
 
 public class Department : BaseModel
@@ -107,6 +121,8 @@ public class Department : BaseModel
     public int BranchId { get; set; }
     [ForeignKey(nameof(BranchId))]
     public virtual Branch? Branch { get; set; }
+
+    public ICollection<Employee>? Employees { get; set; } = new List<Employee>();
 }
 
 [Index(nameof(FullName), IsUnique = true)]
@@ -127,19 +143,18 @@ public class Employee : IdentityUser
     public int DepartmentId { get; set; }
     [ForeignKey(nameof(DepartmentId))]
     public virtual Department? Department { get; set; }
+    ///
+    public virtual ICollection<FollowUp>? FollowUps { get; set; } = new List<FollowUp>();
+    public virtual ICollection<LoginUser>? LoginUsers { get; set; } = new List<LoginUser>();
+    public virtual ICollection<StockHistory>? StockHistories { get; set; } = new List<StockHistory>();
+    public virtual ICollection<Store>? Stores { get; set; } = new List<Store>();
+    public virtual ICollection<StoreHistory>? StoreHistories { get; set; } = new List<StoreHistory>();
+    public virtual ICollection<SaleInvoice>? SaleInvoice { get; set; } = new List<SaleInvoice>();
+    public virtual ICollection<PurchaseInvoice>? PurchaseInvoices { get; set; } = new List<PurchaseInvoice>();
+    public virtual ICollection<Payment>? Payments { get; set; } = new List<Payment>();
+    public virtual ICollection<Receipt>? Receipts { get; set; } = new List<Receipt>();
+
 }
-// public class Salary
-// {
-//     public int Id { get; set; }
-//     public int EmployeeId { get; set; }
-//     [ForeignKey(nameof(EmployeeId))]
-//     public Employee? Employee { get; set; }
-//
-//     public decimal BasicSalary { get; set; }
-//     public decimal Bonus { get; set; }
-//     public decimal Deductions { get; set; }
-//     public DateTime SalaryDate { get; set; }
-// }
 //End Hierarchy
 
 //System Setting
@@ -166,6 +181,8 @@ public class Unit : BaseModel
     public int BranchId { get; set; }
     [ForeignKey(nameof(BranchId))]
     public virtual Branch? Branch { get; set; }
+
+    public virtual ICollection<Product> Products { get; set; } = new List<Product>();
 }
 //End System Setting
 
@@ -180,6 +197,8 @@ public class Brand : BaseModel
     public int BranchId { get; set; }
     [ForeignKey(nameof(BranchId))]
     public virtual Branch? Branch { get; set; }
+
+    public virtual ICollection<Product> Products { get; set; } = new List<Product>();
 }
 public class Category : BaseModel
 {
@@ -192,6 +211,8 @@ public class Category : BaseModel
     public int BranchId { get; set; }
     [ForeignKey(nameof(BranchId))]
     public virtual Branch? Branch { get; set; }
+
+    public virtual ICollection<Product> Products { get; set; } = new List<Product>();
 
 }
 public class Product : BaseModel
@@ -216,6 +237,9 @@ public class Product : BaseModel
     [ForeignKey(nameof(BranchId))]
     public virtual Branch? Branch { get; set; }
 
+    public virtual ICollection<Stock>? Stocks { get; set; } = new List<Stock>();
+    public virtual ICollection<InvoiceItem>? InvoiceItems { get; set; } = new List<InvoiceItem>();
+    public virtual ICollection<PurchaseInvoiceItem>? PurchaseInvoiceItems { get; set; } = new List<PurchaseInvoiceItem>();
 }
 public class Stock : BaseModel
 {
@@ -228,6 +252,8 @@ public class Stock : BaseModel
     public virtual Product? Product { get; set; }
 
     public int Quantity { get; set; }
+
+    public virtual ICollection<StockHistory>? StockHistories { get; set; } = new List<StockHistory>();
 }
 public class StockHistory 
 {
@@ -269,6 +295,11 @@ public class Store : BaseModel
     [ForeignKey(nameof(BranchId))]
     public virtual Branch Branch { get; set; } = null!;
 
+    public virtual ICollection<Stock>? Stocks { get; set; } = new List<Stock>();
+    public virtual ICollection<StoreHistory>? StoreHistories { get; set; } = new List<StoreHistory>();
+    public virtual ICollection<InvoiceItem>? InvoiceItems { get; set; } = new List<InvoiceItem>();
+    public virtual ICollection<PurchaseInvoiceItem>? PurchaseInvoiceItems { get; set; } = new List<PurchaseInvoiceItem>();
+
 }
 public class StoreHistory 
 {
@@ -283,7 +314,7 @@ public class StoreHistory
 
     public string CreatedByUserId { get; set; } = null!;
     [ForeignKey(nameof(CreatedByUserId))]
-public virtual Employee? CreatedUser { get; set; }
+    public virtual Employee? CreatedUser { get; set; }
 }
 
 
@@ -299,6 +330,10 @@ public class Supplier : BaseModel
     public int BranchId { get; set; }
     [ForeignKey(nameof(BranchId))]
     public virtual Branch? Branch { get; set; }
+
+    public virtual ICollection<PurchaseInvoice>? PurchaseInvoices { get; set; } = new List<PurchaseInvoice>();
+    public virtual ICollection<Payment>? Payments { get; set; } = new List<Payment>();
+    public virtual ICollection<SupplierAccount>? SupplierAccounts { get; set; } = new List<SupplierAccount>();
 }
 public class Customer : BaseModel
 {
@@ -313,6 +348,10 @@ public class Customer : BaseModel
     public int BranchId { get; set; }
     [ForeignKey(nameof(BranchId))]
     public virtual Branch? Branch { get; set; }
+
+    public virtual ICollection<SaleInvoice>? SaleInvoice { get; set; } = new List<SaleInvoice>();
+    public virtual ICollection<Receipt>? Receipts { get; set; } = new List<Receipt>();
+    public virtual ICollection<CustomerAccount>? CustomerAccounts { get; set; } = new List<CustomerAccount>();
 }
 /// <summary>
 /// ///////////////////////////////////////////////////////////
@@ -324,6 +363,11 @@ public class Customer : BaseModel
 public class PaymentMethod : BaseModel
 {
     public string Name { get; set; } = null!;// "Cash", "Bank Transfer","Delayed"  (Seeding)
+
+    public virtual ICollection<SaleInvoice>? SaleInvoice { get; set; } = new List<SaleInvoice>();
+    public virtual ICollection<PurchaseInvoice>? PurchaseInvoices { get; set; } = new List<PurchaseInvoice>();
+    public virtual ICollection<Payment>? Payments { get; set; } = new List<Payment>();
+    public virtual ICollection<Receipt>? Receipts { get; set; } = new List<Receipt>();
 }
 
 public class SaleInvoice
@@ -350,6 +394,8 @@ public class SaleInvoice
     public int BranchId { get; set; }
     [ForeignKey(nameof(BranchId))]
     public virtual Branch? Branch { get; set; }
+
+    public virtual ICollection<InvoiceItem>? InvoiceItems { get; set; } = new List<InvoiceItem>();
 }
 public class InvoiceItem
 {
@@ -391,6 +437,8 @@ public class PurchaseInvoice
     public int BranchId { get; set; }
     [ForeignKey(nameof(BranchId))]
     public virtual Branch? Branch { get; set; }
+
+    public ICollection<PurchaseInvoiceItem>? PurchaseInvoiceItems { get; set; } = new List<PurchaseInvoiceItem>();
 }
 public class PurchaseInvoiceItem
 {
