@@ -6,7 +6,8 @@ public class BaseModel
 {
     public int Id { get; set; }
 
-    public DateTime CreatedOn { get; set; } = DateTime.Now;
+    public DateTime CreatedOn { get; set; } = DateTime.UtcNow;
+
 
     public string CreatedByUserId { get; set; } = null!;
     [ForeignKey(nameof(CreatedByUserId))]
@@ -34,6 +35,7 @@ public class FollowUp
     public required string EmployeeId { get; set; }
     [ForeignKey(nameof(EmployeeId))]
     public virtual Employee? Employee { get; set; }
+
 }
 public class LoginUser
 {
@@ -42,7 +44,8 @@ public class LoginUser
     public DateTime? LogOut { get; set; }
 
     public string EmployeeId { get; set; } = null!;
-    public Employee? Employee { get; set; }
+    public virtual Employee? Employee { get; set; }
+
 }
 //End Common
 
@@ -127,9 +130,9 @@ public class Employee : IdentityUser
 {
     [StringLength(250)]
     public string FullName { get; set; } = null!;
-    public bool IsActive { get; set; }
+    public bool IsActive { get; set; } = true;
+    public bool IsUser { get; set; } = false;
 
-    public bool IsUser { get; set; }
 
     public string? ImagePath { get; set; }
     
@@ -470,7 +473,7 @@ public class Payment
     public int BranchId { get; set; }
     [ForeignKey(nameof(BranchId))]
     public virtual Branch? Branch { get; set; }
-}
+}//PaymentVoucher
 public class Receipt
 {
     public int Id { get; set; }
@@ -489,7 +492,7 @@ public class Receipt
     public int BranchId { get; set; }
     [ForeignKey(nameof(BranchId))]
     public virtual Branch? Branch { get; set; }
-}
+}//ReceiptVoucher
 public class CustomerAccount
 {
     public int Id { get; set; }
