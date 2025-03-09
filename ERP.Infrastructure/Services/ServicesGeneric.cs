@@ -104,4 +104,10 @@ public class ServicesGeneric<T> : IServices<T> where T : class
         return _context.Set<T>().AsNoTracking().Where(match).Select(selector);
     }
 
+    public async Task<int> SumAsync(Expression<Func<T, bool>> match, Expression<Func<T, int>> selector)
+    {
+        return await _context.Set<T>().Where(match).SumAsync(selector);
+    }
+
+
 }
