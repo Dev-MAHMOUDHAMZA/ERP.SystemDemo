@@ -20,30 +20,30 @@ public class BaseModel
 
     public bool IsActive { get; set; } = true;
 }
-public class FollowUp
-{
-    public int Id { get; set; }
-    public string? IpAddress { get; set; }
+//public class FollowUp
+//{
+//    public int Id { get; set; }
+//    public string? IpAddress { get; set; }
 
-    public DateTime CreatedOn { get; set; } = DateTime.Now;
+//    public DateTime CreatedOn { get; set; } = DateTime.Now;
 
-    public string? Event { get; set; }
-    /// <summary>
-    /// Navigation Property
-    /// </summary>
-    public required string EmployeeId { get; set; }
-    [ForeignKey(nameof(EmployeeId))]
-    public virtual Employee? Employee { get; set; }
-}
-public class LoginUser
-{
-    public int Id { get; set; }
-    public DateTime Login { get; set; }
-    public DateTime? LogOut { get; set; }
+//    public string? Event { get; set; }
+//    /// <summary>
+//    /// Navigation Property
+//    /// </summary>
+//    public required string EmployeeId { get; set; }
+//    [ForeignKey(nameof(EmployeeId))]
+//    public virtual Employee? Employee { get; set; }
+//}
+//public class LoginUser
+//{
+//    public int Id { get; set; }
+//    public DateTime Login { get; set; }
+//    public DateTime? LogOut { get; set; }
 
-    public string EmployeeId { get; set; } = null!;
-    public Employee? Employee { get; set; }
-}
+//    public string EmployeeId { get; set; } = null!;
+//    public Employee? Employee { get; set; }
+//}
 //End Common
 
 //Hierarchy
@@ -105,6 +105,7 @@ public class Branch : BaseModel
     public virtual ICollection<Brand>? Brands { get; set; } = new List<Brand>();
     public virtual ICollection<Category>? Categories { get; set; } = new List<Category>();
     public virtual ICollection<Product>? Products { get; set; } = new List<Product>();
+
     public virtual ICollection<Store>? Stores { get; set; } = new List<Store>();
     public virtual ICollection<Supplier>? Suppliers { get; set; } = new List<Supplier>();
     public virtual ICollection<Customer>? Customers { get; set; } = new List<Customer>();
@@ -144,8 +145,8 @@ public class Employee : IdentityUser
     [ForeignKey(nameof(DepartmentId))]
     public virtual Department? Department { get; set; }
     ///
-    public virtual ICollection<FollowUp>? FollowUps { get; set; } = new List<FollowUp>();
-    public virtual ICollection<LoginUser>? LoginUsers { get; set; } = new List<LoginUser>();
+    //public virtual ICollection<FollowUp>? FollowUps { get; set; } = new List<FollowUp>();
+    //public virtual ICollection<LoginUser>? LoginUsers { get; set; } = new List<LoginUser>();
     public virtual ICollection<StockHistory>? StockHistories { get; set; } = new List<StockHistory>();
     public virtual ICollection<Store>? Stores { get; set; } = new List<Store>();
     public virtual ICollection<StoreHistory>? StoreHistories { get; set; } = new List<StoreHistory>();
@@ -198,7 +199,8 @@ public class Brand : BaseModel
     [ForeignKey(nameof(BranchId))]
     public virtual Branch? Branch { get; set; }
 
-    public virtual ICollection<Product> Products { get; set; } = new List<Product>();
+    //public virtual ICollection<Product> Products { get; set; } = new List<Product>();
+    public virtual ICollection<Category> Categories { get; set; } = new List<Category>();
 }
 public class Category : BaseModel
 {
@@ -208,9 +210,9 @@ public class Category : BaseModel
     [StringLength(150)]
     public string ImagePath { get; set; } = null!;
 
-    public int BranchId { get; set; }
-    [ForeignKey(nameof(BranchId))]
-    public virtual Branch? Branch { get; set; }
+    public int BrandId { get; set; }
+    [ForeignKey(nameof(BrandId))]
+    public virtual Brand? Brand { get; set; }
 
     public virtual ICollection<Product> Products { get; set; } = new List<Product>();
 
@@ -222,9 +224,9 @@ public class Product : BaseModel
     [Range(1, double.MaxValue)]
     public decimal Price { get; set; }
 
-    public int BrandId { get; set; }
-    [ForeignKey(nameof(BrandId))]
-    public virtual Brand Brand { get; set; } = null!;
+    //public int BrandId { get; set; }
+    //[ForeignKey(nameof(BrandId))]
+    //public virtual Brand Brand { get; set; } = null!;
 
     public int CategoryId { get; set; }
     [ForeignKey(nameof(CategoryId))]
