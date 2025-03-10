@@ -15,5 +15,6 @@ public interface IServices<T> where T : class
     Task<IEnumerable<T>> GetAllAsync(Expression<Func<T, bool>> match);
     IQueryable<T> GetAllQueryable(Expression<Func<T, bool>> match);
     Task<int> CountAsync(Expression<Func<T, bool>> match);
+    Task<int> SumAsync(Expression<Func<T, bool>> match, Expression<Func<T, int>> selector);
     IQueryable<T> GetSelectedQueryable(Expression<Func<T, bool>> match,Expression<Func<T, T>> selector);
 }

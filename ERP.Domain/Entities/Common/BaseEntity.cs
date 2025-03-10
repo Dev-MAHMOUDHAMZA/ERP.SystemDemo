@@ -6,7 +6,8 @@ public class BaseModel
 {
     public int Id { get; set; }
 
-    public DateTime CreatedOn { get; set; } = DateTime.Now;
+    public DateTime CreatedOn { get; set; } = DateTime.UtcNow;
+
 
     public string CreatedByUserId { get; set; } = null!;
     [ForeignKey(nameof(CreatedByUserId))]
@@ -81,7 +82,6 @@ public class Company : BaseModel
     [StringLength(500)]
     public string Seal { get; set; } = null!;
 }
-
 [Index(nameof(Name), IsUnique = true)]
 public class Branch : BaseModel
 {
@@ -114,7 +114,6 @@ public class Branch : BaseModel
     public virtual ICollection<Payment>? Payments { get; set; } = new List<Payment>();
     public virtual ICollection<Receipt>? Receipts { get; set; } = new List<Receipt>();
 }
-
 public class Department : BaseModel
 {
     public string Name { get; set; } = null!;
@@ -125,15 +124,14 @@ public class Department : BaseModel
 
     public ICollection<Employee>? Employees { get; set; } = new List<Employee>();
 }
-
 [Index(nameof(FullName), IsUnique = true)]
 public class Employee : IdentityUser
 {
     [StringLength(250)]
     public string FullName { get; set; } = null!;
-    public bool IsActive { get; set; }
+    public bool IsActive { get; set; } = true;
+    public bool IsUser { get; set; } = false;
 
-    public bool IsUser { get; set; }
 
     public string? ImagePath { get; set; }
     
@@ -186,7 +184,6 @@ public class Unit : BaseModel
     public virtual ICollection<Product> Products { get; set; } = new List<Product>();
 }
 //End System Setting
-
 public class Brand : BaseModel
 {
     [StringLength(150)]
@@ -318,8 +315,6 @@ public class StoreHistory
     [ForeignKey(nameof(CreatedByUserId))]
     public virtual Employee? CreatedUser { get; set; }
 }
-
-
 public class Supplier : BaseModel
 {
     public string Name { get; set; } = null!;
@@ -337,6 +332,8 @@ public class Supplier : BaseModel
     public virtual ICollection<Payment>? Payments { get; set; } = new List<Payment>();
     public virtual ICollection<SupplierAccount>? SupplierAccounts { get; set; } = new List<SupplierAccount>();
 }
+
+
 public class Customer : BaseModel
 {
     public string Name { get; set; } = null!;
@@ -371,7 +368,6 @@ public class PaymentMethod : BaseModel
     public virtual ICollection<Payment>? Payments { get; set; } = new List<Payment>();
     public virtual ICollection<Receipt>? Receipts { get; set; } = new List<Receipt>();
 }
-
 public class SaleInvoice
 {
     public int Id { get; set; }
@@ -418,7 +414,6 @@ public class InvoiceItem
     public decimal UnitPrice { get; set; }
     public decimal Total { get; set; }
 }
-
 public class PurchaseInvoice
 {
     public int Id { get; set; }
@@ -478,8 +473,7 @@ public class Payment
     public int BranchId { get; set; }
     [ForeignKey(nameof(BranchId))]
     public virtual Branch? Branch { get; set; }
-}
-
+}//PaymentVoucher
 public class Receipt
 {
     public int Id { get; set; }
@@ -498,9 +492,7 @@ public class Receipt
     public int BranchId { get; set; }
     [ForeignKey(nameof(BranchId))]
     public virtual Branch? Branch { get; set; }
-}
-
-
+}//ReceiptVoucher
 public class CustomerAccount
 {
     public int Id { get; set; }

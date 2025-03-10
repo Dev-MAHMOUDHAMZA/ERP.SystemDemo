@@ -12,37 +12,33 @@ public class ServicesGeneric<T> : IServices<T> where T : class
 
     public async Task<bool> SaveAsync(T entity)
     {
-        if (entity is not null)
-        {
-            await _context.Set<T>().AddAsync(entity);
-            return await _context.SaveChangesAsync() > 0;
-        }
-        return false;
+        if (entity == null) return false;
+
+        _context.Set<T>().Add(entity);
+        return await _context.SaveChangesAsync() > 0;
     }
 
     public async Task<bool> SaveRangeAsync(List<T> entities)
     {
-        if (entities?.Any() == true)
+        if (entities?.Count > 0)
         {
-            await _context.Set<T>().AddRangeAsync(entities);
+            _context.Set<T>().AddRange(entities);
             return await _context.SaveChangesAsync() > 0;
         }
         return false;
     }
 
-    public async Task<bool> UpdateAsync(T entity)
+        public async Task<bool> UpdateAsync(T entity)
     {
-        if (entity is not null)
-        {
-            _context.Set<T>().Update(entity);
-            return await _context.SaveChangesAsync() > 0;
-        }
-        return false;
+        if (entity == null) return false;
+
+        _context.Entry(entity).State = EntityState.Modified;
+        return await _context.SaveChangesAsync() > 0;
     }
 
     public async Task<bool> UpdateRangeAsync(List<T> entities)
     {
-        if (entities?.Any() == true)
+        if (entities?.Count > 0)
         {
             _context.Set<T>().UpdateRange(entities);
             return await _context.SaveChangesAsync() > 0;
@@ -52,17 +48,15 @@ public class ServicesGeneric<T> : IServices<T> where T : class
 
     public async Task<bool> DeleteAsync(T entity)
     {
-        if (entity is not null)
-        {
-            _context.Set<T>().Remove(entity);
-            return await _context.SaveChangesAsync() > 0;
-        }
-        return false;
+        if (entity == null) return false;
+
+        _context.Set<T>().Remove(entity);
+        return await _context.SaveChangesAsync() > 0;
     }
 
     public async Task<bool> DeleteRangeAsync(List<T> entities)
     {
-        if (entities?.Any() == true)
+        if (entities?.Count > 0)
         {
             _context.Set<T>().RemoveRange(entities);
             return await _context.SaveChangesAsync() > 0;
@@ -104,4 +98,8 @@ public class ServicesGeneric<T> : IServices<T> where T : class
         return _context.Set<T>().AsNoTracking().Where(match).Select(selector);
     }
 
+    public async Task<int> SumAsync(Expression<Func<T, bool>> match, Expression<Func<T, int>> selector)
+    {
+        return await _context.Set<T>().Where(match).SumAsync(selector);
+    }
 }
